@@ -1,33 +1,35 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-// import { PerlinHelper } from "../../components/PerlinHelper";
 import { noise } from "../../helpers";
 import { OrbitControls } from "@react-three/drei";
-import { PerlinHelper } from "../../components/PerlinHelper";
 
 const temp = new THREE.Object3D();
 const v2 = new THREE.Vector2(0, 0);
 const color = new THREE.Color(0, 0, 0);
 
 export function Chapter3Screen() {
-  const count = 10000;
+  const count = 20000;
 
+  const isFirstRef = useRef(true);
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
-  const moverRef = useRef(
-    [...new Array(count)].map(
-      () =>
-        new Mover(
-          Math.random() * 20 + 1,
-          Math.random() * 10 - 5,
-          Math.random() * 10 - 5
-        )
-    )
-  );
+  const moverRef = useRef([...new Array(count)].map(() => new Mover()));
 
   useFrame(({ viewport, clock }, delta) => {
     const width = viewport.width / 2;
     const height = viewport.height / 2;
+
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+      for (let i = 0; i < count; i++) {
+        const mover = moverRef.current[i];
+        mover.init(
+          Math.random() * 20 + 1,
+          Math.random() * (viewport.width + 4) - (width + 2),
+          Math.random() * (viewport.height + 4) - (height + 2)
+        );
+      }
+    }
 
     if (!moverRef.current || !instancedMeshRef.current) return;
 
@@ -62,7 +64,7 @@ export function Chapter3Screen() {
       mover.update(delta);
       mover.checkEdges(width, height);
 
-      temp.scale.set(mover.mass / 16, mover.mass / 16, mover.mass / 16);
+      temp.scale.set(mover.mass / 50, mover.mass / 50, mover.mass / 50);
       temp.position.set(mover.position.x, mover.position.y, -mover.mass * 0.2);
       temp.updateMatrix();
       instancedMeshRef.current.setColorAt(
@@ -79,10 +81,9 @@ export function Chapter3Screen() {
         ref={instancedMeshRef}
         args={[undefined, undefined, count]}
       >
-        {/* <sphereGeometry args={[1]} /> */}
+        <sphereGeometry args={[1]} />
         <meshPhongMaterial />
       </instancedMesh>
-      <PerlinHelper div={0.2} size={15} />
       <OrbitControls />
     </>
   );
@@ -94,7 +95,14 @@ class Mover {
   velocity: THREE.Vector2;
   acceleration: THREE.Vector2;
 
-  constructor(m: number, x: number, y: number) {
+  constructor() {
+    this.mass = 0;
+    this.position = new THREE.Vector2(0, 0);
+    this.velocity = new THREE.Vector2(0, 0);
+    this.acceleration = new THREE.Vector2(0, 0);
+  }
+
+  init(m: number, x: number, y: number) {
     this.mass = m;
     this.position = new THREE.Vector2(x, y);
     this.velocity = new THREE.Vector2(0, 0);
@@ -115,7 +123,7 @@ class Mover {
   }
 
   checkEdges(w: number, h: number) {
-    const padding = 1;
+    const padding = 4;
     const width = w + padding;
     const height = h + padding;
 
