@@ -6,7 +6,9 @@ interface BaseCanvasProps {
 }
 export function BaseCanvas({ children }: BaseCanvasProps) {
   return (
-    <Canvas style={{ display: "flex", width: "100%" }}>
+    <Canvas
+      style={{ display: "flex", width: "100%", backgroundColor: "white" }}
+    >
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
         position={[10, 10, 10]}
