@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
-import { noise } from "../helpers";
+import { noise } from "../../helpers";
 
 const temp = new THREE.Object3D();
 

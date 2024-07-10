@@ -3,13 +3,14 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { noise } from "../../helpers";
 import { OrbitControls } from "@react-three/drei";
+import { Slerp } from "../../components/canvas";
 
 const temp = new THREE.Object3D();
 const v2 = new THREE.Vector2(0, 0);
 const color = new THREE.Color(0, 0, 0);
 
 export function Chapter3Screen() {
-  const count = 20000;
+  const count = 10000;
 
   const isFirstRef = useRef(true);
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
@@ -76,7 +77,7 @@ export function Chapter3Screen() {
   });
 
   return (
-    <>
+    <Slerp inputType="handTracking">
       <instancedMesh
         ref={instancedMeshRef}
         args={[undefined, undefined, count]}
@@ -85,7 +86,7 @@ export function Chapter3Screen() {
         <meshPhongMaterial />
       </instancedMesh>
       <OrbitControls />
-    </>
+    </Slerp>
   );
 }
 
