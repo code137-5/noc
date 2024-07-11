@@ -140,4 +140,11 @@ class Mover {
       this.position.y = height;
     }
   }
+
+  // const hands = handTrackingRef.current?.getHandPositions();
+  //     const hand = hands?.l || hands?.r;
+  //     if (hand) {
+  //       x = (hand[0].x * 2 - 1) / 2;
+  //       y = (hand[0].y * 2 - 1) / 2;
+  //     }
 }
