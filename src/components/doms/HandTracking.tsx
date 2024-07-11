@@ -81,7 +81,7 @@ export const HandTracking = forwardRef<HandTrackingRef>((_, ref) => {
       }
     };
 
-    let close: number;
+    let close: ReturnType<typeof setInterval>;
 
     if (!handLoaded) {
       console.log("handLoaded : ", handLoaded);
