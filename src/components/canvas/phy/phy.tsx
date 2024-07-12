@@ -10,7 +10,13 @@ import {
   useConeTwistConstraint,
 } from "@react-three/cannon";
 
-import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js";
+import {
+  FontLoader,
+  TextGeometry,
+  FontData,
+} from "three/examples/jsm/Addons.js";
+
+import fontJson from "./assets/Do Hyeon_Regular.json";
 
 extend({ TextGeometry });
 
@@ -89,7 +95,7 @@ export function PhyChar({
 }: phyCharProps) {
   const font = useMemo(() => {
     const loader = new FontLoader();
-    const f = loader.parse(require("./assets/Do Hyeon_Regular.js"));
+    const f = loader.parse(fontJson as any as FontData);
     return f;
   }, []);
 
