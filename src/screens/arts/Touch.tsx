@@ -1,6 +1,5 @@
 import { Physics } from "@react-three/cannon";
 import { PhyPlane, PhyString } from "../../components/canvas/phy";
-import { OrbitControls } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 
@@ -138,7 +137,7 @@ export function Touch() {
       stringListRes.current = stringListRes.current.filter(
         (_, index) => index !== 0
       );
-    }, 1000);
+    }, 800);
 
     return () => clearInterval(handle);
   }, [res]);
@@ -240,8 +239,8 @@ export function Touch() {
         <shadowMaterial attach="material" transparent opacity={0.4} />
       </mesh>
 
-      <OrbitControls />
-      <gridHelper />
+      {/* <OrbitControls /> */}
+      {/* <gridHelper /> */}
     </>
   );
 }
