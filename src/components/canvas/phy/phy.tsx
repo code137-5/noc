@@ -37,7 +37,7 @@ export function PhyPlane({ meshProps, ...props }: phyPlaneProps) {
 
   return (
     <mesh {...meshProps} ref={ref as any}>
-      <planeGeometry />
+      <planeGeometry args={[100, 100]} />
       <meshStandardMaterial />
     </mesh>
   );
@@ -81,6 +81,7 @@ interface phyCharProps extends BoxProps {
   boxCallback?: (
     box: React.MutableRefObject<THREE.Vector3 | undefined>
   ) => void;
+  force: number;
 }
 
 export function PhyChar({
@@ -91,6 +92,7 @@ export function PhyChar({
   meshProps,
   bodyCallback,
   boxCallback,
+  force,
   ...props
 }: phyCharProps) {
   const font = useMemo(() => {
@@ -118,7 +120,10 @@ export function PhyChar({
     <mesh
       {...meshProps}
       ref={ref as any}
-      onClick={() => api.applyImpulse([50, 0, -50], [0, 0, 0])}
+      onClick={(event) => {
+        meshProps?.onClick && meshProps.onClick(event);
+        api.applyImpulse([0, 0, -force], [0, 0, 0]);
+      }}
     >
       <textGeometry
         onUpdate={(self) => {
@@ -184,6 +189,7 @@ interface phyStringProps extends BoxProps {
   height: number;
   color: string;
   wordSpacing: number;
+  force: number;
   meshProps?: MeshProps;
 }
 export function PhyString({
@@ -193,6 +199,7 @@ export function PhyString({
   color,
   meshProps,
   wordSpacing,
+  force,
   ...props
 }: phyStringProps) {
   const bodys: React.MutableRefObject<THREE.Object3D | undefined>[] = [];
@@ -234,6 +241,7 @@ export function PhyString({
       meshProps,
       bodyCallback: getBody,
       boxCallback: getBox,
+      force,
     });
   });
 
