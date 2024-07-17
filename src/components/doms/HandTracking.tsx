@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { useCheckSupportedDevices } from "../../hooks";
 import { HandPosition, HandTrackingRef } from "../../helpers/handTrackingRef";
 
 declare const window: { Hands: any; Camera: any; VERSION: any };
@@ -17,8 +16,6 @@ export const HandTracking = forwardRef<HandTrackingRef>((_, ref) => {
   const [handPositions, setHandPositions] = useState<
     ReturnType<HandTrackingRef["getHandPositions"]>
   >({ l: undefined, r: undefined });
-
-  useCheckSupportedDevices();
 
   useImperativeHandle(ref, () => ({ getHandPositions: () => handPositions }), [
     handPositions,
