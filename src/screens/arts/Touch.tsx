@@ -138,7 +138,7 @@ export function Touch() {
       stringListRes.current = stringListRes.current.filter(
         (_, index) => index !== 0
       );
-    }, 100);
+    }, 1000);
 
     return () => clearInterval(handle);
   }, [res]);
