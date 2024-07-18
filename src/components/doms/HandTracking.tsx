@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { HandPosition, HandTrackingRef } from "../../helpers/handTrackingRef";
+import { Vector3 } from "three";
 
 declare const window: { Hands: any; Camera: any; VERSION: any };
 
@@ -25,21 +26,26 @@ export const HandTracking = forwardRef<HandTrackingRef>((_, ref) => {
     multiHandedness: [{ label: string }, { label: string }];
     multiHandLandmarks: [HandPosition[], HandPosition[]];
   }) => {
-    let r, l;
+    let maxSize = 0;
+    let r;
 
-    if (props.multiHandedness[0]) {
-      if (props.multiHandedness[0].label === "Right")
-        r = props.multiHandLandmarks[0];
-      else l = props.multiHandLandmarks[0];
-    }
+    const positionsList = props.multiHandedness.map(({ label }) => {
+      if (label === "Right") {
+        return props.multiHandLandmarks[0];
+      }
+    });
 
-    if (props.multiHandedness[1]) {
-      if (props.multiHandedness[1].label === "Right")
-        r = props.multiHandLandmarks[1];
-      else l = props.multiHandLandmarks[1];
-    }
+    positionsList.map((positions) => {
+      if (positions) {
+        const size = getSize(positions);
+        if (maxSize < size) {
+          maxSize = size;
+          r = positions;
+        }
+      }
+    });
 
-    setHandPositions({ l, r });
+    setHandPositions({ l: undefined, r });
   };
 
   const handInit = useCallback(() => {
@@ -49,7 +55,7 @@ export const HandTracking = forwardRef<HandTrackingRef>((_, ref) => {
       },
     });
     hands.setOptions({
-      maxNumHands: 2,
+      maxNumHands: 10,
       modelComplexity: 1,
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
@@ -132,3 +138,34 @@ export const HandTracking = forwardRef<HandTrackingRef>((_, ref) => {
 });
 
 export default HandTracking;
+
+function getSize(positions: HandPosition[]) {
+  const palmIndexList = [
+    [5, 0],
+    [9, 0],
+    [13, 0],
+    [17, 0],
+  ];
+
+  const palmVectors = palmIndexList.map((palmIndex) => {
+    const v3 = new Vector3(
+      positions[palmIndex[0]].x,
+      positions[palmIndex[0]].y,
+      positions[palmIndex[0]].z
+    );
+    v3.sub(
+      new Vector3(
+        positions[palmIndex[1]].x,
+        positions[palmIndex[1]].y,
+        positions[palmIndex[1]].z
+      )
+    );
+
+    return v3;
+  });
+
+  const avg =
+    palmVectors.reduce((a, b) => a + b.length(), 0) / palmVectors.length;
+
+  return avg;
+}

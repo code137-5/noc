@@ -82,10 +82,6 @@ const getList = () => {
     "사운드테크",
     "개발자",
     "연구소모임",
-
-    "명함",
-    "링크드인",
-    "개인SNS계정",
   ];
 
   return [
@@ -118,7 +114,7 @@ export function Touch() {
   const [list, setList] = useState<{ string: string; color: string }[]>([]);
 
   const reset = () => {
-    colorSeed.current = Math.floor(Math.random() * 100);
+    colorSeed.current = Math.floor(Math.random() * 90);
     const newRes = getList().map((item, index) => ({
       string: item,
       color: colors[colorSeed.current][index % 5],
@@ -133,7 +129,7 @@ export function Touch() {
       const string = stringListRes.current[0];
       if (!string) return;
 
-      setList((prev) => [...prev, string]);
+      setList((prev) => [...(prev.length > 8 ? prev.slice(1) : prev), string]);
       stringListRes.current = stringListRes.current.filter(
         (_, index) => index !== 0
       );
@@ -195,7 +191,7 @@ export function Touch() {
 
         {list.map(({ string, color }, index) => (
           <PhyString
-            key={index}
+            key={string}
             color={color}
             position={[0, Math.min((index + 1) * 4, 20), 0]}
             string={string}
