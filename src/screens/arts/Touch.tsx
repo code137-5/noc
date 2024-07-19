@@ -129,11 +129,11 @@ export function Touch() {
       const string = stringListRes.current[0];
       if (!string) return;
 
-      setList((prev) => [...(prev.length > 8 ? prev.slice(1) : prev), string]);
+      setList((prev) => [...(prev.length > 6 ? prev.slice(1) : prev), string]);
       stringListRes.current = stringListRes.current.filter(
         (_, index) => index !== 0
       );
-    }, 800);
+    }, 1300);
 
     return () => clearInterval(handle);
   }, [res]);
@@ -193,7 +193,7 @@ export function Touch() {
           <PhyString
             key={string}
             color={color}
-            position={[0, Math.min((index + 1) * 4, 20), 0]}
+            position={[0, Math.min((index + 1) * 4.5, 20), 0]}
             string={string}
             size={2}
             height={1.5}
@@ -208,7 +208,7 @@ export function Touch() {
           position={[-4.5, 2, 0]}
           string="모두의"
           size={3}
-          height={0.5}
+          height={1.5}
           wordSpacing={0.001}
           meshProps={{ receiveShadow: true, castShadow: true }}
           force={100}
@@ -218,7 +218,7 @@ export function Touch() {
           position={[4.5, 2, 0]}
           string="연구소"
           size={3}
-          height={0.5}
+          height={1.5}
           wordSpacing={0.001}
           meshProps={{ receiveShadow: true, castShadow: true }}
           force={100}
