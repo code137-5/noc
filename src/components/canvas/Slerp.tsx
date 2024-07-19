@@ -36,7 +36,7 @@ export function Slerp({ children, inputType = "mouse", ...args }: SlerpProps) {
     rotationQuaternion.setFromEuler(rotationEuler);
     group.current.quaternion.slerp(
       rotationQuaternion,
-      y === 0 && x === 0 ? 0.008 : 0.01
+      y === 0 && x === 0 ? 0.005 : 0.05
     );
   });
 
