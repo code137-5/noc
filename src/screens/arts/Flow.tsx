@@ -13,7 +13,7 @@ const v2 = new THREE.Vector2(0, 0);
 const color = new THREE.Color(0, 0, 0);
 
 export function Flow() {
-  const count = 12000;
+  const count = 18000;
 
   const [animation, api] = useSprings(count, () => ({ scale: 1 }), []);
 
